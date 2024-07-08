@@ -10,9 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "jquery": "^3.7.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.10.2",
+    "nodemon": "^3.1.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "safer-buffer": "^2.1.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
