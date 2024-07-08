@@ -1,0 +1,41 @@
+.leftbar {
+    translate: -4em 1em;
+    background-color: #111b21;
+    width: 40em;
+    height: 61em;
+}
+
+.rightbar {
+    translate: -4em 1em;
+    background-image: url('../../images/bg.jpg');
+    width: 100%;
+    height: 61em;
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.under {
+    border: 1px solid #202c33;
+}
+
+.content {
+    margin-top: 3em;
+}
+
+.profileContent {
+    margin-left: .6em;
+}
+
+.title {
+color: #fdfdfd;
+    margin-left: 1.2em;
+    margin-top: .2em;
+}
+
+.desc {
+    color: #d1d7db;
+    translate: -12.3em 2.3em;
+}

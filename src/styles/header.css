@@ -1,0 +1,39 @@
+.header {
+  background-color: #202c33;
+  width: 28em;
+  height: 4em;
+}
+
+.profile {
+    translate: 1em 0.8em;
+}
+
+.community {
+    translate: 11em 1.2em;
+    width: 1.7em;
+    height: 1.7em;
+}
+
+.status {
+    translate: 12em 1.2em;
+    width: 1.6em;
+    height: 1.6em;
+}
+
+.news {
+    translate: 13em 1.2em;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.message {
+    translate: 14em 1.4em;
+    width: 1.4em;
+    height: 1.4em;
+}
+
+.menu {
+    translate: 15em 1.3em;
+    width: 1.4em;
+    height: 1.4em;
+}
