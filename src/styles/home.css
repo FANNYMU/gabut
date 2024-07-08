@@ -21,6 +21,10 @@ div {
     border: 1px solid #202c33;
 }
 
+.tra {
+    translate: 0 .8em;
+}
+
 .content {
     margin-top: 3em;
 }
@@ -38,4 +42,23 @@ color: #fdfdfd;
 .desc {
     color: #d1d7db;
     translate: -12.3em 2.3em;
+}
+
+.profileContentRight {
+    margin-top: .6em;
+    margin-left: .6em;
+
+}
+    .titleRight {
+    color: #fdfdfd;
+        margin-left: 1.2em;
+        translate: 0 1em;
+    }
+
+.profileRight {
+    background-color: #202c33;
+}
+
+.RemoveThisClass {
+    display: none;
 }
