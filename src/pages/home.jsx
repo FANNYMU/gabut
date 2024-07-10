@@ -6,6 +6,7 @@ import Search from "../components/search";
 import Content from "../components/content";
 import ContentRight from "../components/ContentRight";
 import InputChat from "../components/inputChat";
+import ChatHistory from "../components/chatHistory";
 
 function ReloadChat(ref) {
   $(ref.current).removeClass("RemoveThisClass");
@@ -27,6 +28,9 @@ export default function Home() {
             <div  className="border border-gray-300 rightbar">
                 <div id="Remove" ref={removeRef} className="RemoveThisClass">
                   <ContentRight/>
+                  <div>
+                    <ChatHistory/>
+                  </div>
                   <div>
                     <InputChat/>
                   </div>
