@@ -5,8 +5,7 @@ async function createConnection() {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'chat',
-    port: 3308,
+    database: 'chat'
   });
 
   console.log('Connected to the database!');

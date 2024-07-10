@@ -20,7 +20,8 @@
     "nodemon": "^3.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "safer-buffer": "^2.1.2"
+    "safer-buffer": "^2.1.2",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

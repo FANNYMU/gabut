@@ -62,3 +62,7 @@ color: #fdfdfd;
 .RemoveThisClass {
     display: none;
 }
+
+.history {
+    translate: 0 4em;
+}

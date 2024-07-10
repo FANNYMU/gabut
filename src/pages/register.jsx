@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Register = () => {
+const Register = ({ onRegister }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +23,8 @@ const Register = () => {
                 if (response.ok) {
                     setMessage(data.message);
                     setError('');
+                    // Memanggil fungsi onRegister dengan data user yang diterima dari server
+                    onRegister(data.user); // Pastikan data.user berisi informasi pengguna seperti username
                 } else {
                     setError(data.error);
                     setMessage('');

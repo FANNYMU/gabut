@@ -3,6 +3,8 @@ const createConnection = require('./connection');
 const cors = require('cors');
 const port = 3000;
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 app.use(cors());
 app.use(express.json());
@@ -64,29 +66,35 @@ app.post('/login', async (req, res) => {
 
 // Endpoint untuk mengirim pesan
 app.post('/send-message', async (req, res) => {
-    const { message, user_id } = req.body;
-    if (!message || !user_id) {
-      return res.status(400).json({ error: 'Message and user ID are required' });
-    }
-  
-    try {
-      const [result] = await db.execute(
-        'INSERT INTO chat (message, user_id) VALUES (?, ?)',
-        [message, user_id]
-      );
-  
-      res.status(201).json({ message: 'Message sent successfully' });
-    } catch (error) {
-      console.error('Error sending message:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
-  
+  const { message, user_id } = req.body;
+  if (!message || !user_id) {
+    return res.status(400).json({ error: 'Message and user ID are required' });
+  }
+
+  try {
+    const [result] = await db.execute(
+      'INSERT INTO chat (message, user_id) VALUES (?, ?)',
+      [message, user_id]
+    );
+
+    // Mengirim pesan ke semua klien yang terhubung menggunakan Socket.io
+    io.emit('message', { message, user_id });
+
+    res.status(201).json({ message: 'Message sent successfully' });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Endpoint untuk mendapatkan semua pesan
 app.get('/chats', async (req, res) => {
   try {
-    const [rows, fields] = await db.execute('SELECT * FROM chat');
+    const [rows, fields] = await db.execute(`
+      SELECT chat.message, users.username 
+      FROM chat 
+      JOIN users ON chat.user_id = users.id
+    `); // Sesuaikan dengan nama tabel dan kolom yang sesuai di database Anda
     res.json(rows);
   } catch (error) {
     console.error('Error fetching chats:', error);
@@ -96,7 +104,8 @@ app.get('/chats', async (req, res) => {
 
 // Jalankan fungsi untuk membuat koneksi ke database
 connectToDatabase().then(() => {
-  app.listen(port, () => {
+  http.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
 });
+
