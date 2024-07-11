@@ -66,3 +66,7 @@ color: #fdfdfd;
 .history {
     translate: 0 4em;
 }
+
+.ds {
+    display: none;
+}
