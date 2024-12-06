@@ -5,7 +5,7 @@ async function createConnection() {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'chat'
+    database: 'fake_whatsapp_clone'
   });
 
   console.log('Connected to the database!');

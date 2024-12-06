@@ -1,16 +1,20 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import React, { useState, useEffect, useRef } from 'react';
+import Cookies from 'js-cookie';
+import { useAuth } from '../context/authContext';
 
 const ChatHistory = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { user } = useAuth();
   const [chats, setChats] = useState([]);
+
+  // Fetch current username from cookie
+  const currentUsername = Cookies.get('username');
 
   // Fungsi untuk mengambil pesan dari server
   const fetchChats = async () => {
     try {
       const response = await fetch('http://localhost:3000/chats');
       const data = await response.json();
-      console.log('Fetched chats:', data);
+      // console.log(data); // Log the entire chat data fetched from the server
       setChats(data);
     } catch (error) {
       console.error('Error fetching chat history:', error);
@@ -19,9 +23,9 @@ const ChatHistory = () => {
 
   // Menggunakan useEffect untuk menjalankan polling
   useEffect(() => {
-    const interval = setInterval(fetchChats, 2000); // Setel interval polling di sini (contoh: setiap 2 detik)
-    return () => clearInterval(interval); // Bersihkan interval pada unmount atau perubahan deps
-  }, []); // [] berarti useEffect hanya dijalankan sekali setelah mount
+    const interval = setInterval(fetchChats, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const chatContainerRef = useRef(null);
 
@@ -41,35 +45,64 @@ const ChatHistory = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message, username: currentUser.username }), // Menggunakan currentUser dari useContext
+          body: JSON.stringify({ message, username: user.username }),
         });
 
         const data = await response.json();
-        if (response.ok) {
-          console.log('Message sent:', data.message); // Untuk memeriksa pesan balasan dari server
-        } else {
-          console.error('Error from server:', data.error);
-        }
       } catch (err) {
         console.error('Failed to send message:', err);
-        // Handle error
       }
     }
   };
 
   return (
-    <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }} ref={chatContainerRef}>
-      <div className="chat-history p-4 space-y-2">
+    <div 
+      className="h-[calc(100vh-120px)] overflow-y-auto"
+      ref={chatContainerRef}
+    >
+      <div className="p-4 space-y-1">
         {chats.length > 0 ? (
-          chats.map((chat, index) => (
-            <div key={index} className={`flex ${chat.sentByMe ? 'justify-end' : 'justify-start'}`}>
-              <div className={`bg-gray-100 p-2 rounded-lg ${chat.sentByMe ? 'bg-blue-200 self-end' : 'bg-gray-200'}`}>
-                <strong className="font-bold">{chat.sentByMe ? currentUser.username : chat.username}: </strong>{chat.message}
+          chats.map((chat, index) => {
+            const isFirstMessage = index === 0 || chats[index - 1].username !== chat.username;
+            const isLastMessage = index === chats.length - 1 || chats[index + 1].username !== chat.username;
+            const isMyMessage = chat.username === currentUsername;
+            
+            return (
+              <div key={index} className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}> 
+                <div 
+                  className={`
+                    relative max-w-[65%] px-3 py-2 
+                    ${isMyMessage ? 'bg-[#005C4B] ml-1' : 'bg-[#202C33] mr-1'}
+                    ${isFirstMessage ? 'rounded-t-md' : ''}
+                    ${isLastMessage ? 'rounded-b-md' : ''}
+                    ${!isFirstMessage && !isLastMessage ? 'rounded-none' : ''}
+                    ${isFirstMessage && isLastMessage ? 'rounded-md' : ''}
+                  `}
+                >
+                  {!isMyMessage && (
+                    <span className="block text-[#00A884] text-xs leading-5 font-medium">
+                      {chat.username}
+                    </span>
+                  )}
+                  <div className="text-[#E9EDEF] text-sm leading-5 font-normal break-words">
+                    {chat.message}
+                    <span className="inline-block text-[#8696A0] text-xs ml-1 leading-4 min-w-[50px] text-right align-bottom">
+                    {chat.created_at ? new Date(chat.created_at).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true
+                    }) : 'N/A'}
+                  </span>
+                  </div>
+                  {/*  */}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
-          <div className="text-gray-500">No chats available</div>
+          <div className="flex items-center justify-center h-full">
+            <div className="text-[#8696A0] text-sm">No messages yet</div>
+          </div>
         )}
       </div>
     </div>

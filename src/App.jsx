@@ -1,37 +1,41 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import ErrorPage from './404/ErrorPage';
-import Home from './pages/home';
-import Register from './pages/register';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/authContext';
 import Login from './pages/login';
+import Register from './pages/register';
+import Home from './pages/home';
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user } = useAuth();
 
-  const handleLogin = (user) => {
-      setCurrentUser(user);
-      // Redirect to home page after successful login
-      return <Navigate to="/" replace />;
-  };
-
-  const handleRegister = (user) => {
-      // Redirect to login page after successful registration
-      return <Navigate to="/login" replace />;
+  // Protected Route Component
+  const ProtectedRoute = ({ children }) => {
+    return user ? children : <Navigate to="/login" replace />;
   };
 
   return (
-    <AuthProvider>
-      <BrowserRouter>
-          <Routes>
-              <Route path="/" element={<Home currentUser={currentUser} />} />
-              <Route path="/register" element={<Register onRegister={handleRegister} />} />
-              <Route path="/login" element={<Login onLogin={handleLogin} />} />
-              <Route path="*" element={<Navigate to="/404" />} />
-              <Route path="/404" element={<ErrorPage />} />
-          </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <Router>
+      <Routes>
+        <Route 
+          path="/login" 
+          element={user ? <Navigate to="/" replace /> : <Login />} 
+        />
+        <Route 
+          path="/register" 
+          element={user ? <Navigate to="/" replace /> : <Register />} 
+        />
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
+        />
+        {/* Catch-all route redirects to login if not authenticated */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
