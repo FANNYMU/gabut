@@ -65,8 +65,3 @@ Special thanks to all contributors and open-source libraries that made this proj
 This project is purely for educational purposes. Any resemblance to WhatsApp is coincidental, and this project is not affiliated with or endorsed by WhatsApp Inc.
 
 Feel free to fork and contribute! 😊
-
-
-### What’s Next?
-- Add a **`Logo`** SVG file or use a public link (replace the image link in `![Logo]()`).
-- If you want specific features or p
