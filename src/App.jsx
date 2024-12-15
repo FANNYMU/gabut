@@ -1,9 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/authContext';
-import Login from './pages/login';
-import Register from './pages/register';
-import Home from './pages/home';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useAuth } from "./context/authContext";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import Home from "./pages/home";
+import ErrorPage from "./404/ErrorPage";
 
 function App() {
   const { user } = useAuth();
@@ -16,24 +22,24 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/" replace /> : <Login />} 
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <Login />}
         />
-        <Route 
-          path="/register" 
-          element={user ? <Navigate to="/" replace /> : <Register />} 
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" replace /> : <Register />}
         />
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
-          } 
+          }
         />
         {/* Catch-all route redirects to login if not authenticated */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
